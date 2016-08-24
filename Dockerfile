@@ -4,23 +4,27 @@ FROM ubuntu:16.04
 MAINTAINER Ondrej Platek
 
 RUN apt-get update && \
-    apt-get install -y wget build-essential python3 python3-dev python3-pip pkg-config
+    apt-get install -y wget build-essential python3 python3-dev python3-pip pkg-config automake autoconf libtool 
 
 RUN wget http://www.festvox.org/flite/packed/flite-1.4/flite-1.4-release.tar.bz2 && \
     bunzip2 flite-1.4-release.tar.bz2 && \
     tar xvf flite-1.4-release.tar && \
     cd flite-1.4-release && \
-    ./configure && \
-    make
+    ./configure --enable-shared && \
+    make && \
+    make install
+
 RUN wget http://unimrcp.googlecode.com/files/unimrcp-deps-1.2.0.tar.gz  && \
     tar -xzvf unimrcp-deps-1.2.0.tar.gz && cd unimrcp-deps-1.2.0  && \
-    ./build-dep-libs.sh -s
+    cat build-dep-libs.sh | sed 's/.*if \[.*yes.*\].*/if \[ $MAKEINSTALL = "yes" \] ; then/' > build.sh && chmod +x build.sh && \
+    ./build.sh -s
 
-RUN wget http://unimrcp.googlecode.com/files/unimrcp-1.1.0.tar.gz && \
+RUN export PATH=$PATH:/usr/local && wget http://unimrcp.googlecode.com/files/unimrcp-1.1.0.tar.gz && \
     tar -xzvf unimrcp-1.1.0.tar.gz && \
     cd unimrcp-1.1.0 && \
-    ./configure –enable-flite-plugin –-with-flite=../flite-1.4-release && \
-    make
+    ./configure --enable-shared && \
+    LD_LIBRARY_PATH=/usr/local:../flite-1.4-release make
+# --enable-flite-plugin --with-flite=../flite-1.4-release
 
 RUN cd unimrcp-1.1.0 && \
     make install && \
