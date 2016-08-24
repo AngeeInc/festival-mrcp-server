@@ -11,6 +11,7 @@ RUN wget http://www.festvox.org/flite/packed/flite-1.4/flite-1.4-release.tar.bz2
     tar xvf flite-1.4-release.tar && \
     cd flite-1.4-release && \
     ./configure --enable-shared && \
+    cat config/config | sed 's/\(CFLAGS.*\)/\1 -fPIC/' > cfg && mv cfg config/config && \
     make && \
     make install
 
@@ -22,8 +23,8 @@ RUN wget http://unimrcp.googlecode.com/files/unimrcp-deps-1.2.0.tar.gz  && \
 RUN export PATH=$PATH:/usr/local && wget http://unimrcp.googlecode.com/files/unimrcp-1.1.0.tar.gz && \
     tar -xzvf unimrcp-1.1.0.tar.gz && \
     cd unimrcp-1.1.0 && \
-    ./configure --enable-shared && \
-    LD_LIBRARY_PATH=/usr/local:../flite-1.4-release make
+    ./configure --enable-shared --enable-flite-plugin --with-flite=../flite-1.4-release && \
+    make
 # --enable-flite-plugin --with-flite=../flite-1.4-release
 
 RUN cd unimrcp-1.1.0 && \
