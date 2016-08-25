@@ -38,4 +38,4 @@ RUN apt-get install -y vim
 RUN wget https://raw.githubusercontent.com/AngeeInc/festival-mrcp-server/vojta-test/mrcp/main.c && \
     wget https://raw.githubusercontent.com/AngeeInc/festival-mrcp-server/vojta-test/mrcp/Makefile
 
-# RUN /bin/sh -c "while true; do echo hello world; sleep 1; done" 
+RUN /bin/sh -c "while true; do echo hello world; sleep 1; done" 

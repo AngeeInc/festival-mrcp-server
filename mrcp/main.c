@@ -47,6 +47,7 @@ int main(int argc, const char *argv[])
     mrcp_application_session_terminate(mrcp_session);
     apr_pool_destroy(mp);
 
-    apr_terminate();
+    // TODO: SEGFAULT
+    // apr_terminate();
     return 0;
 }
