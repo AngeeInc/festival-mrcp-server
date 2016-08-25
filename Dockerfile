@@ -29,9 +29,11 @@ RUN export PATH=$PATH:/usr/local && wget http://unimrcp.googlecode.com/files/uni
 RUN cd unimrcp-1.1.0 && \
     make install && \
     ldconfig && \
-    sed -i conf/unimrcpserver.xml 's/.*mrcpflite.*/<engine id="Flite-1" name="mrcpflite" enable="true"\/>/'
+    cd /unimrcp-1.1.0 && \
+    cat conf/unimrcpserver.xml | sed 's/.*mrcpflite.*/<engine id="Flite-1" name="mrcpflite" enable="true"\/>/' > uni.xml && \
+    mv uni.xml conf/unimrcpserver.xml
 
-RUN apt-get install vim
+RUN apt-get install -y vim
 
 RUN wget https://raw.githubusercontent.com/AngeeInc/festival-mrcp-server/vojta-test/mrcp/main.c && \
     wget https://raw.githubusercontent.com/AngeeInc/festival-mrcp-server/vojta-test/mrcp/Makefile
