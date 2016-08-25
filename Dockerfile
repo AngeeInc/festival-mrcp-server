@@ -25,8 +25,15 @@ RUN export PATH=$PATH:/usr/local && wget http://unimrcp.googlecode.com/files/uni
     cd unimrcp-1.1.0 && \
     ./configure --enable-shared --enable-flite-plugin --with-flite=../flite-1.4-release && \
     make
-# --enable-flite-plugin --with-flite=../flite-1.4-release
 
 RUN cd unimrcp-1.1.0 && \
     make install && \
-    ldconfig
+    ldconfig && \
+    sed -i conf/unimrcpserver.xml 's/.*mrcpflite.*/<engine id="Flite-1" name="mrcpflite" enable="true"\/>/'
+
+RUN apt-get install vim
+
+RUN wget https://raw.githubusercontent.com/AngeeInc/festival-mrcp-server/vojta-test/mrcp/main.c && \
+    wget https://raw.githubusercontent.com/AngeeInc/festival-mrcp-server/vojta-test/mrcp/Makefile
+
+# RUN /bin/sh -c "while true; do echo hello world; sleep 1; done" 
